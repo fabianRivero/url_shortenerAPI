@@ -1,0 +1,12 @@
+POST HTTP://localhost:5000/api/urls HTTP/1.1
+Content-Type: application/json
+
+{
+    "long_url": "https://myfirstfitnessblog.netlify.app/blog/post/como-combinar-fitness-con-mindfulness-y-yoga?page=1"
+}
+
+###
+GET HTTP://localhost:5000/api/urls HTTP/1.1
+
+###
+DELETE http://localhost:5000/api/urls/oaiAGmgCbm
