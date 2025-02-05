@@ -2,10 +2,11 @@
   "name": "url-shortener",
   "version": "1.0.0",
   "description": "url shortener proyect",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "NODE_ENV=development nodemon server.js",
+    "start": "NODE_ENV=prod node server.js"
   },
   "author": "Fabian Rivero",
   "license": "MIT",
