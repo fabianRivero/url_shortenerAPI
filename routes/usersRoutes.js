@@ -2,18 +2,20 @@
 import express from 'express';
 import auth from '../middlewares/auth.js';
 import {
+  getUsers,
+  getUser,
   signup,
   login,
-  updateInfo,
   deleteUser,
 } from '../controllers/usersController.js';
 
 const router = express.Router();
 
 // Rutas CRUD
-router.post('/users/login', login);            // login
-router.post('/users/signup', signup);            // signup
-router.patch('/users/:id', [auth], updateInfo);     // actualizar nombre y/o contraseña
-router.delete('/users/:id', [auth], deleteUser);      // borrar perfil
+router.get('/', getUsers);
+router.get('/:id', getUser);                //obtener usuarios
+router.post('/login', login);            // login
+router.post('/signup', signup);            // signup
+router.delete('/:id', [auth], deleteUser);      // borrar perfil
 
 export default router;

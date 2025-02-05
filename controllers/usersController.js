@@ -7,6 +7,29 @@ function validatePassword(password) {
     return password.length >= 8; 
   };
 
+// Obtener todos los usuarios
+export const getUsers = async (req, res) => {
+    try {
+      const [rows] = await connection.execute('SELECT * FROM users');
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+      res.status(500).json({ error: 'Error al obtener usuarios.' });
+    }
+};
+
+// Obtener usuario por ID
+export const getUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const [rows] = await connection.execute(`SELECT * FROM users WHERE id = ?`, [id]);
+      res.status(200).json(rows[0]);
+    } catch (error) {
+      console.error('Error al obtener usuario:', error);
+      res.status(500).json({ error: 'Error al obtener usuario.' });
+    }
+};
+
 //para el signup del usuario
 export const signup = async (req, res) =>{
     try {
@@ -72,7 +95,7 @@ export const login = async(req, res) =>{
         const token = jwt.sign({
             id: rows[0].id,
         }, process.env.JWT_SECRET, {
-            expiresIn: '2h',
+            expiresIn: '1h',
         });
         
 
@@ -88,72 +111,6 @@ export const login = async(req, res) =>{
     } catch (error) {
         res.status(500).json({error: "Somthin went wrong", details: error.message});
     }
-};
-
-// Actualizar nombre y/o contraseña de usuario
-export const updateInfo = async (req, res) => {
-  const { id } = req.params;
-  const { name, password } = req.body;
-
-if (!name && !password) {
-    return res.status(400).json({ error: "At least one field (name or password) is required." });
-}
-
-if (password && password.length < 8) {
-    return res.status(400).json({ error: "Password must be at least 8 characters long." });
-}
-
-if (req.user.id !== parseInt(id)) {
-return res.status(403).json({ error: "You can only update your own account." });
-}
-
-  try {
-    const [user] = await connection.execute('SELECT * FROM users WHERE id = ?', [req.params.id]);
-    if (user.length === 0) {
-        return res.status(404).json({ error: 'Usuario no encontrado.' });
-    }
-
-    if (name && name.trim() === '') {
-        return res.status(400).json({ error: 'El nombre no puede estar vacío.' });
-    };
-
-    if (password && !validatePassword(password)) {
-        return res.status(400).send('Password must have at least 8 characters');
-    };
-
-        let updateQuery = 'UPDATE users SET ';
-        const updateParams = [];
-
-        if (name) {
-            updateQuery += 'name = ?, ';
-            updateParams.push(name);
-        }
-
-        if (password) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            updateQuery += 'password = ?, ';
-            updateParams.push(hashedPassword);
-        }
-
-        updateQuery = updateQuery.slice(0, -2);
-
-        updateQuery += ' WHERE id = ?';
-        updateParams.push(req.params.id);
-
-        await connection.execute(updateQuery, updateParams);
-        
-    res.status(200).json({
-        message: 'Datos actualizados correctamente.',
-        updatedFields: {
-            name: name ? 'Actualizado' : 'No modificado',
-            password: password ? 'Actualizado' : 'No modificado',
-        },
-    });
-  } catch (error) {
-    console.error('Error al actualizar:', error);
-    res.status(500).json({ error: 'Error al actualizar.' });
-  }
 };
 
 // Eliminar cuenta de usuario

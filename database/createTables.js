@@ -14,7 +14,7 @@ const createTables = async function createTables() {
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS original_url (
         id VARCHAR(100) NOT NULL PRIMARY KEY UNIQUE,
-        long_url VARCHAR(200) NOT NULL UNIQUE,
+        long_url VARCHAR(200) NOT NULL,
         short_url VARCHAR(45) NOT NULL UNIQUE,
         clicks INT NOT NULL,
         userId INT,
