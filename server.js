@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 const app = express();
 const PORT = 5000;
+const HOST = process.env.HOST || "localhost";
 dotenv.config();
 app.use(cors());
 
@@ -37,5 +38,5 @@ app.use('/api/users', usersRoutes);
 
 
 app.listen(process.env.PORT || PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
 });
