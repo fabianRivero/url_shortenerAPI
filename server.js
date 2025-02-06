@@ -20,6 +20,21 @@ async function main() {
   
   main().catch(console.error);
 
+import connection from './database/connection.js';  // Ruta al archivo de conexión
+
+async function testDatabaseConnection() {
+    try {
+        // Realiza una consulta simple para verificar la conexión
+        const [rows, fields] = await connection.execute('SELECT 1');
+        console.log('Conexión a la base de datos exitosa');
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error.message);
+    }
+}
+
+testDatabaseConnection();
+
+
   app.get('/favicon.ico', (req, res) => res.status(204));
 
 
