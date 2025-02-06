@@ -6,8 +6,7 @@ import usersRoutes from './routes/usersRoutes.js';
 import dotenv from 'dotenv';
 
 const app = express();
-const PORT = 5000;
-const HOST = process.env.HOST || "localhost";
+const HOST = process.env.DB_HOST || "localhost";
 dotenv.config();
 app.use(cors());
 
@@ -37,6 +36,6 @@ app.use('/api/urls', urlRoutes);
 app.use('/api/users', usersRoutes);
 
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
 });
