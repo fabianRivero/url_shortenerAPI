@@ -22,7 +22,6 @@ import connection from './database/connection.js';  // Ruta al archivo de conexi
 
 async function testDatabaseConnection() {
     try {
-        // Realiza una consulta simple para verificar la conexión
         const [rows, fields] = await connection.execute('SELECT 1');
         console.log('Conexión a la base de datos exitosa');
     } catch (error) {
